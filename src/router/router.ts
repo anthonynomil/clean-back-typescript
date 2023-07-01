@@ -1,16 +1,11 @@
-import express, {Router} from "express";
-import messageRouter from "./message.router";
+import express, { Router } from "express";
 
 const router: Router = express.Router();
 
-const routes = [{
-  path: "/",
-  router: messageRouter,
-}]
-
+const routes: any[] = [];
 
 routes.forEach((route) => {
   router.use(route.path, route.router);
-})
+});
 
 export default router;

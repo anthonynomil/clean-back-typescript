@@ -3,8 +3,7 @@ import express from "express";
 import httpStatus from "http-status";
 import router from "./router/router";
 import ApiError from "./utils/ApiError.js";
-import {errorConverter, errorHandler} from "./middlewares/error";
-import {PORT} from "./config/server";
+import { errorConverter, errorHandler } from "./middlewares/error";
 
 const app = express();
 
@@ -26,8 +25,8 @@ const unexpectedErrorHandler = (error: Error) => {
 process.on("uncaughtException", unexpectedErrorHandler);
 process.on("unhandledRejection", unexpectedErrorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+app.listen(process.env["PORT"], () => {
+  console.log(`Server started on port ${process.env["PORT"]}`);
 });
 
 process.on("SIGINT", async () => {
