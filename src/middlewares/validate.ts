@@ -1,31 +1,21 @@
 import e from "express";
+import { z } from "zod";
 import ApiError from "utils/ApiError";
 import httpStatus from "http-status";
-import pick from "utils/pick.utils";
-import { ZodType } from "zod";
-
-interface ValidationSchema {
-  params?: ZodType<any, any>;
-  query?: ZodType<any, any>;
-  body?: ZodType<any, any>;
-}
 
 const validate =
-  (schema: ValidationSchema) =>
-  (req: e.Request, res: e.Response, next: e.NextFunction): void => {
-    const validSchema = pick(schema, ["params", "query", "body"]);
-    const keysToValidate = Object.keys(validSchema) as (keyof ValidationSchema)[];
-    const object = pick(req, keysToValidate as (keyof e.Request)[]);
-    const errors: string[] = [];
-    for (const key of keysToValidate) {
-      const parsed = validSchema[key]?.safeParse(object[key]);
-      if (!parsed || !parsed.success) {
-        const error = parsed?.error?.errors.map((e) => e.message).join(", ");
-        errors.push(error || "Invalid data");
-      } else object[key] = parsed.data;
+  (schema: z.ZodObject<never, never>) =>
+  (req: e.Request, _res: e.Response, next: e.NextFunction): void => {
+    const schemaKeys = Object.keys(schema);
+    const reqKeys = Object.keys(req);
+    const invalidKeys = reqKeys.filter((key) => !schemaKeys.includes(key));
+    if (invalidKeys.length) {
+      throw new ApiError(httpStatus.BAD_REQUEST, `Invalid request keys: ${invalidKeys.join(", ")}`);
     }
-    if (errors.length) return next(new ApiError(httpStatus.BAD_REQUEST, errors.join(", ")));
-    Object.assign(req, object);
+    const validated = schema.safeParse(req);
+    if (!validated.success) {
+      throw new ApiError(httpStatus.BAD_REQUEST, validated.error.message);
+    }
     next();
   };
 

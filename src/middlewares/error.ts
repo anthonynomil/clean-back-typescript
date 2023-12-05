@@ -20,7 +20,7 @@ export const errorConverter = (
   next(error);
 };
 
-export const errorHandler = (err: any, req: e.Request, res: e.Response, next: e.NextFunction): void => {
+export const errorHandler = (err: any, req: e.Request, res: e.Response): void => {
   let { statusCode, message } = err;
   const envType = env.ENV;
 

@@ -1,56 +1,53 @@
 import { z } from "zod";
-import { passwordMatch, role } from "validator/helpers.validator";
+import { passwordMatch } from "validator/helpers.validator";
+import schemas from "schemas";
 
-const create = {
+const create = z.object({
   body: z
     .object({
-      email: z.string().email(),
-      password: z.string(),
-      confirmPassword: z.string(),
-      name: z.string().optional(),
-      role: z.number().optional().refine(role, {
-        message: "Role is not valid",
-      }),
+      email: schemas.user.email,
+      password: schemas.user.password,
+      confirmPassword: schemas.user.confirmPassword,
+      name: schemas.user.name.optional(),
+      role: schemas.user.role.optional(),
     })
     .refine(passwordMatch, {
       message: "Passwords do not match",
     }),
-};
+});
 
-const getById = {
+const getById = z.object({
   params: z.object({
-    userId: z.string().uuid(),
+    userId: schemas.global.id,
   }),
-};
+});
 
-const update = {
+const update = z.object({
   params: z.object({
-    userId: z.string().uuid(),
+    userId: schemas.global.id,
   }),
   body: z
     .object({
-      email: z.string().email().optional(),
-      name: z.string().optional(),
-      role: z.number().optional().refine(role, {
-        message: "Role is not valid",
-      }),
-      password: z.string().optional(),
-      confirmPassword: z.string().optional(),
+      email: schemas.user.email.optional(),
+      name: schemas.user.name.optional(),
+      role: schemas.user.role.optional(),
+      password: schemas.user.password.optional(),
+      confirmPassword: schemas.user.confirmPassword.optional(),
     })
     .refine(passwordMatch, {
-      message: "Passwords do not match",
+      message: "Passwords do not match,
     }),
-};
+});
 
-const remove = {
+const remove = z.object({
   params: z.object({
-    userId: z.string().uuid(),
-  }),
-};
+    userId: schemas.global.id
+  })
+});
 
 export default {
   create,
   getById,
   update,
-  remove,
+  remove
 };

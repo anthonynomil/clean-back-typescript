@@ -1,31 +1,32 @@
 import { z } from "zod";
 import { passwordMatch } from "validator/helpers.validator";
+import schemas from "schemas";
 
-const login = {
+const login = z.object({
   body: z.object({
-    email: z.string().email(),
-    password: z.string().min(5).max(20),
+    email: schemas.user.email,
+    password: schemas.user.password,
   }),
-};
+});
 
-const register = {
+const register = z.object({
   body: z
     .object({
-      email: z.string().email(),
-      password: z.string().min(5).max(20),
-      confirmPassword: z.string().min(5).max(20),
-      name: z.string().optional(),
+      email: schemas.user.email,
+      password: schemas.user.password,
+      confirmPassword: schemas.user.confirmPassword,
+      name: schemas.user.name.optional(),
     })
     .refine(passwordMatch, {
       message: "Passwords do not match",
     }),
-};
+});
 
-const refreshTokens = {
+const refreshTokens = z.object({
   body: z.object({
-    refreshToken: z.string(),
+    refreshToken: schemas.token.token,
   }),
-};
+});
 
 export default {
   login,
