@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { passwordMatch } from "validator/helpers.validator";
+import { passwordMatch } from "validators/helpers.validator";
 import schemas from "schemas";
 
 const create = z.object({
@@ -35,19 +35,19 @@ const update = z.object({
       confirmPassword: schemas.user.confirmPassword.optional(),
     })
     .refine(passwordMatch, {
-      message: "Passwords do not match,
+      message: "Passwords do not match",
     }),
 });
 
 const remove = z.object({
   params: z.object({
-    userId: schemas.global.id
-  })
+    userId: schemas.global.id,
+  }),
 });
 
 export default {
   create,
   getById,
   update,
-  remove
+  remove,
 };

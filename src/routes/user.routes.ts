@@ -1,6 +1,6 @@
 import { Router } from "express";
 import validate from "middlewares/validate";
-import userValidator from "validator/user.validator";
+import userValidator from "validators/user.validator";
 import userController from "controllers/user.controller";
 import auth from "middlewares/auth";
 import userRoles from "const/enums/user.roles";

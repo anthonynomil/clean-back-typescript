@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { passwordMatch } from "validator/helpers.validator";
+import { passwordMatch } from "validators/helpers.validator";
 import schemas from "schemas";
 
 const login = z.object({

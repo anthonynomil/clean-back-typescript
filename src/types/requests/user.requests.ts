@@ -1,4 +1,4 @@
-import userValidator from "validator/user.validator";
+import userValidator from "validators/user.validator";
 import { z } from "zod";
 
 export type UserCreate = z.infer<typeof userValidator.create>;

@@ -4,7 +4,7 @@ import ApiError from "utils/ApiError";
 import httpStatus from "http-status";
 
 const validate =
-  (schema: z.ZodObject<never, never>) =>
+  (schema: z.ZodObject<any, any>) =>
   (req: e.Request, _res: e.Response, next: e.NextFunction): void => {
     const schemaKeys = Object.keys(schema);
     const reqKeys = Object.keys(req);

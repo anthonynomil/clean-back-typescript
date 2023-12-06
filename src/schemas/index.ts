@@ -6,4 +6,4 @@ export default {
   global: globalSchema,
   user: userSchema,
   token: tokenSchema,
-}
+};
